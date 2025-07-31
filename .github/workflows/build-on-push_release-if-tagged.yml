@@ -26,22 +26,22 @@ jobs:
       - name: Upload windows-executable
         uses: actions/upload-artifact@v4
         with:
-          name: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
+          name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
           path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
       - name: Upload linux-executable
         uses: actions/upload-artifact@v4
         with:
-          name: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
+          name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
           path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
       - name: Upload macos-arm executable
         uses: actions/upload-artifact@v4
         with:
-          name: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
+          name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
           path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
       - name: Upload macos-x64 executable
         uses: actions/upload-artifact@v4
         with:
-          name: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
+          name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
           path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
       - name: Upload config file
         uses: actions/upload-artifact@v4
@@ -66,8 +66,8 @@ jobs:
         with:
           body: ${{ env.TAG_ANNOTATION_MESSAGE }}
           files: |
-            bunBuild/${{ github.event.repository.name }}_${{  github.ref_name }}_osx-arm
-            bunBuild/${{ github.event.repository.name }}_${{  github.ref_name }}_osx-x64
-            bunBuild/${{ github.event.repository.name }}_${{  github.ref_name }}_linux
-            bunBuild/${{ github.event.repository.name }}_${{  github.ref_name }}_win.exe
+            ${{ github.event.repository.name }}_${{  github.ref_name }}_osx-arm
+            ${{ github.event.repository.name }}_${{  github.ref_name }}_osx-x64
+            ${{ github.event.repository.name }}_${{  github.ref_name }}_linux
+            ${{ github.event.repository.name }}_${{  github.ref_name }}_win.exe
             config.json5
