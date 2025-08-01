@@ -18,43 +18,44 @@ jobs:
           echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
       - uses: oven-sh/setup-bun@v2
       - run: bun install
-      - run: mkdir bunBuild
-      - run: bun build --compile --target=bun-windows-x64 main.js --outfile bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
-      - run: bun build --compile --target=bun-linux-x64 main.js --outfile bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
-      - run: bun build --compile --target=bun-darwin-arm64 main.js --outfile bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
-      - run: bun build --compile --target=bun-darwin-x64 main.js --outfile bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
+      - run: bun build --compile --target=bun-windows-x64 main.js --outfile ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
+      - run: bun build --compile --target=bun-linux-x64 main.js --outfile ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
+      - run: bun build --compile --target=bun-darwin-arm64 main.js --outfile ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
+      - run: bun build --compile --target=bun-darwin-x64 main.js --outfile ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
+      - run: ls -la
+      - run: pwd
       - name: Upload windows-executable
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
-          path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
+          path: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe
       - name: Upload linux-executable
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
-          path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
+          path: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux
       - name: Upload macos-arm executable
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
-          path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
+          path: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm
       - name: Upload macos-x64 executable
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
-          path: bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
+          path: ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64
       - name: Upload config file
         uses: actions/upload-artifact@v4
         with:
           name: config.json5
           path: config.json5
-      - run: mv bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64 bunBuild/${{ github.event.repository.name }}_${{ github.ref_name }}_osx-x64
+      - run: mv ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-x64 ${{ github.event.repository.name }}_${{ github.ref_name }}_osx-x64
         if: startsWith(github.ref, 'refs/tags/')
-      - run: mv bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm bunBuild/${{ github.event.repository.name }}_${{ github.ref_name }}_osx-arm
+      - run: mv ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_osx-arm ${{ github.event.repository.name }}_${{ github.ref_name }}_osx-arm
         if: startsWith(github.ref, 'refs/tags/')
-      - run: mv bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux bunBuild/${{ github.event.repository.name }}_${{ github.ref_name }}_linux
+      - run: mv ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_linux ${{ github.event.repository.name }}_${{ github.ref_name }}_linux
         if: startsWith(github.ref, 'refs/tags/')
-      - run: mv bunBuild/${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe bunBuild/${{ github.event.repository.name }}_${{ github.ref_name }}_win.exe
+      - run: mv ${{ github.event.repository.name }}_${{ env.COMMIT_SHORT_SHA }}_win.exe ${{ github.event.repository.name }}_${{ github.ref_name }}_win.exe
         if: startsWith(github.ref, 'refs/tags/')
       - run: |
           tagAnnotationMessage=$(git for-each-ref refs/tags/${{  github.ref_name }} --format='%(contents)')
