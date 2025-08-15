@@ -60,12 +60,10 @@ async function main() {
 
   try {
     console.log(`\nIncrementing ${versionType} version...`);
+    // note: This will automatically create a git tag with the new version number
     const output = execSync(`npm version ${versionType}`, { encoding: 'utf8' });
     const newVersion = output.trim();
     console.log(`Version updated to ${newVersion}`);
-
-    console.log('Tagging current commit...');
-    execSync(`git tag -a ${newVersion}`, { stdio: 'inherit' });
 
     console.log('Pushing tags to origin...');
     execSync(`git push origin tag ${newVersion}`, { stdio: 'inherit' });
