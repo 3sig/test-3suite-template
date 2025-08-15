@@ -28,7 +28,7 @@ function promptVersionType() {
     console.log('1. patch (x.x.X) - Bug fixes');
     console.log('2. minor (x.X.x) - New features');
     console.log('3. major (X.x.x) - Breaking changes');
-    
+
     rl.question('\nEnter your choice (1/2/3): ', (answer) => {
       const choice = answer.trim();
       switch (choice) {
@@ -50,28 +50,28 @@ function promptVersionType() {
 }
 
 async function main() {
-  console.log('🔍 Checking for uncommitted changes...');
+  console.log('Checking for uncommitted changes...');
   checkUncommittedChanges();
-  
-  console.log('✅ No uncommitted changes found.');
-  
+
+  console.log('No uncommitted changes found.');
+
   const versionType = await promptVersionType();
   rl.close();
-  
+
   try {
-    console.log(`\n📦 Incrementing ${versionType} version...`);
+    console.log(`\nIncrementing ${versionType} version...`);
     const output = execSync(`npm version ${versionType}`, { encoding: 'utf8' });
     const newVersion = output.trim();
-    console.log(`✅ Version updated to ${newVersion}`);
-    
-    console.log('📤 Pushing changes to origin...');
-    execSync('git push origin main', { stdio: 'inherit' });
-    
-    console.log('🏷️  Pushing tags to origin...');
-    execSync('git push origin --tags', { stdio: 'inherit' });
-    
-    console.log(`🎉 Successfully released ${newVersion}!`);
-    
+    console.log(`Version updated to ${newVersion}`);
+
+    console.log('Tagging current commit...');
+    execSync(`git tag -a v${newVersion} -m "Release ${newVersion}"`, { stdio: 'inherit' });
+
+    console.log('Pushing tags to origin...');
+    execSync(`git push origin tag v${newVersion}`, { stdio: 'inherit' });
+
+    console.log(`Successfully released ${newVersion}!`);
+
   } catch (error) {
     console.error('❌ Error during release process:', error.message);
     process.exit(1);
