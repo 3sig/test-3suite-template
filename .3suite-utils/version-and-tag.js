@@ -65,10 +65,10 @@ async function main() {
     console.log(`Version updated to ${newVersion}`);
 
     console.log('Tagging current commit...');
-    execSync(`git tag -a v${newVersion} -m "Release ${newVersion}"`, { stdio: 'inherit' });
+    execSync(`git tag -a ${newVersion} -m "Release ${newVersion}"`, { stdio: 'inherit' });
 
     console.log('Pushing tags to origin...');
-    execSync(`git push origin tag v${newVersion}`, { stdio: 'inherit' });
+    execSync(`git push origin tag ${newVersion}`, { stdio: 'inherit' });
 
     console.log(`Successfully released ${newVersion}!`);
 
