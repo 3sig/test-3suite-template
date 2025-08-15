@@ -80,7 +80,23 @@ async function main() {
 
   console.log('No uncommitted changes found.');
 
-  const versionType = await promptVersionType();
+  // Check if version type is provided as command line argument
+  const args = process.argv.slice(2);
+  let versionType;
+  
+  if (args.length > 0) {
+    const providedType = args[0].toLowerCase();
+    if (['patch', 'minor', 'major'].includes(providedType)) {
+      versionType = providedType;
+      console.log(`Using provided version type: ${versionType}`);
+    } else {
+      console.error(`❌ Invalid version type: ${providedType}. Must be 'patch', 'minor', or 'major'.`);
+      process.exit(1);
+    }
+  } else {
+    versionType = await promptVersionType();
+  }
+  
   rl.close();
 
   try {
