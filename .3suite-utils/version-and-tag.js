@@ -40,8 +40,9 @@ function incrementVersion(version, type) {
 function promptVersionType() {
   return new Promise((resolve) => {
     // Get current version using npm
-    const output = execSync(`npm version ${versionType}`, { encoding: 'utf8' });
-    const currentVersion = output.trim();
+    const versionOutput = execSync('npm version --json', { encoding: 'utf8' });
+    const versions = JSON.parse(versionOutput);
+    const currentVersion = versions[Object.keys(versions)[0]]; // Get the package version
 
     const patchVersion = incrementVersion(currentVersion, 'patch');
     const minorVersion = incrementVersion(currentVersion, 'minor');
