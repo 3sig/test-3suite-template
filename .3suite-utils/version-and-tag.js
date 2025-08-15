@@ -22,12 +22,36 @@ function checkUncommittedChanges() {
   }
 }
 
+function incrementVersion(version, type) {
+  const [major, minor, patch] = version.split('.').map(Number);
+
+  switch (type) {
+    case 'patch':
+      return `${major}.${minor}.${patch + 1}`;
+    case 'minor':
+      return `${major}.${minor + 1}.0`;
+    case 'major':
+      return `${major + 1}.0.0`;
+    default:
+      throw new Error(`Unknown version type: ${type}`);
+  }
+}
+
 function promptVersionType() {
   return new Promise((resolve) => {
+    // Get current version using npm
+    const output = execSync(`npm version ${versionType}`, { encoding: 'utf8' });
+    const currentVersion = output.trim();
+
+    const patchVersion = incrementVersion(currentVersion, 'patch');
+    const minorVersion = incrementVersion(currentVersion, 'minor');
+    const majorVersion = incrementVersion(currentVersion, 'major');
+
+    console.log(`\nCurrent version: ${currentVersion}`);
     console.log('\nSelect version increment type:');
-    console.log('1. patch (x.x.X) - Bug fixes');
-    console.log('2. minor (x.X.x) - New features');
-    console.log('3. major (X.x.x) - Breaking changes');
+    console.log(`1. patch (${currentVersion} → ${patchVersion}) - Bug fixes`);
+    console.log(`2. minor (${currentVersion} → ${minorVersion}) - New features`);
+    console.log(`3. major (${currentVersion} → ${majorVersion}) - Breaking changes`);
 
     rl.question('\nEnter your choice (1/2/3): ', (answer) => {
       const choice = answer.trim();
@@ -61,6 +85,7 @@ async function main() {
   try {
     console.log(`\nIncrementing ${versionType} version...`);
     // note: This will automatically create a git tag with the new version number
+
     const output = execSync(`npm version ${versionType}`, { encoding: 'utf8' });
     const newVersion = output.trim();
     console.log(`Version updated to ${newVersion}`);
